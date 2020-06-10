@@ -4,7 +4,8 @@ const express = require('express');
 const fs = require('fs')
 const path = require('path')
 const uniqid = require('uniqid');
-const { getData } = require('../models/func.js')
+const { getData, writeData } = require('../models/func.js')
+const Cube = require('../models/cube.js')
 
 
 let uniqueId = 4
@@ -68,14 +69,9 @@ module.exports = (app) => {
         let json = getData('../config/database.json')
         if (json.find(x => x.name === name)) return res.end('The name exists, please choose another one')
 
-        let obj = { id: uniqid(), name, description, url: imageUrl, level: difficultyLevel }
+        let obj = new Cube(name, imageUrl, description, difficultyLevel)
         json.push(obj)
-        console.log(json)
-
-        fs.writeFile(__dirname + '/database.json', JSON.stringify(json), (err) => {
-            if (err) throw err;
-            console.log('The file has been saved!');
-        });
+        writeData(json)
         // })
         res.redirect('/')
         // res.render('create', {
