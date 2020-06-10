@@ -10,6 +10,14 @@ function getData(filename) {
     return JSON.parse(data)
 }
 
+function writeData(data) {
+    fs.writeFile(path.join(__dirname, '../config/database.json'), JSON.stringify(data), (err) => {
+        if (err) throw err;
+        console.log('The file has been saved!');
+    });
+}
+
 module.exports = {
-    getData
+    getData,
+    writeData
 }
