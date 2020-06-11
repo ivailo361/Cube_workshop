@@ -1,5 +1,6 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
+const path = require('path')
 
 const bodyParser = require('body-parser');
 
@@ -12,12 +13,13 @@ module.exports = (app) => {
             log: function () { return "LOG"}
         },
         partialsDir: './partials',
-        defaultLayout: false,
-        // layoutsDir: __dirname + '/public/views/layouts',
+        // defaultLayout: false,
+        layoutsDir: path.join(__dirname, '../views/layouts'),
     }));
     app.set('view engine', '.hbs');
 
-    app.use(express.static('static'))
+    // app.use(express.static(path.join(__dirname, '../static'))); 
+    app.use(express.static('static'));
 
     app.use(bodyParser.urlencoded({ extended: true }));
 
