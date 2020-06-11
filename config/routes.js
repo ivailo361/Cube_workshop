@@ -1,98 +1,97 @@
 const express = require('express');
 // var router = express.Router();
 // const links = require('../config/database.json')
-const fs = require('fs')
 const path = require('path')
-const uniqid = require('uniqid');
 const { getData, writeData } = require('../models/func.js')
 const Cube = require('../models/cube.js')
 
 
-let uniqueId = 4
+const router = express.Router()
 
-module.exports = (app) => {
-    app.get('/', function (req, res, next) {
-        // console.log(getData)
-        // let filePath = path.normalize(
-        //     path.join(__dirname, '/database.json')
-        // );
-        // let data = fs.readFileSync(filePath)
-        req.links = getData('../config/database.json')
+// module.exports = (app) => {
+router.get('/', function (req, res, next) {
+    console.log(path.join(__dirname, '../static'))
+    // console.log(getData)
+    // let filePath = path.normalize(
+    //     path.join(__dirname, '/database.json')
+    // );
+    // let data = fs.readFileSync(filePath)
+    req.links = getData('../config/database.json')
 
-        next()
-    }, function (req, res) {
-        let links = req.links
-        res.render('index', { links })
+    next()
+}, function (req, res) {
+    let links = req.links
+    res.render('index.hbs', { links, layout: "main.hbs", title: "Cubics" });
 
-    });
+});
 
-    app.post('/search', (req, res, next) => {
-        let search = new RegExp(req.body.search, 'i')
-        database = getData('../config/database.json')
+router.post('/search', (req, res, next) => {
+    let search = new RegExp(req.body.search, 'i')
+    database = getData('../config/database.json')
 
-        let selected = database
-            .filter(x => x.name.match(search))
-            .filter(x => Number(x.level) >= Number(req.body.from))
-            .filter(x => {
-                if (req.body.to === '' || Number(x.level) <= Number(req.body.to)) return x
-            })
+    let selected = database
+        .filter(x => x.name.match(search))
+        .filter(x => Number(x.level) >= Number(req.body.from))
+        .filter(x => {
+            if (req.body.to === '' || Number(x.level) <= Number(req.body.to)) return x
+        })
 
-        let obj = {}
-        obj.links = selected
-        obj.params = req.body
-        // if (selected[0] === undefined) {
-        //     res.redirect('/')
-        //     return
-        // }
-        res.render('index', obj)
-    })
+    let obj = {}
+    obj.links = selected
+    obj.params = req.body
+    // if (selected[0] === undefined) {
+    //     res.redirect('/')
+    //     return
+    // }
+    res.render('index', obj)
+})
 
 
-    app.get('/about', function (req, res, next) {
-        res.render('about');
-    });
+router.get('/about', function (req, res, next) {
+    res.render('about');
+});
 
-    app.get('/create', function (req, res, next) {
-        res.render('create.hbs')
-    });
+router.get('/create', function (req, res, next) {
+    res.render('create.hbs')
+});
 
-    app.post('/create', (req, res) => {
+router.post('/create', (req, res) => {
 
-        // let json = getData('../config/database.json')
+    // let json = getData('../config/database.json')
 
-        // let filePath = path.normalize(
-        //     path.join(__dirname, '/database.json')
-        // )
+    // let filePath = path.normalize(
+    //     path.join(__dirname, '/database.json')
+    // )
 
-        // fs.readFile(filePath, 'utf-8', (err, data) => {
-        let { name, description, imageUrl, difficultyLevel } = req.body
-        let json = getData('../config/database.json')
-        if (json.find(x => x.name === name)) return res.end('The name exists, please choose another one')
+    // fs.readFile(filePath, 'utf-8', (err, data) => {
+    let { name, description, imageUrl, difficultyLevel } = req.body
+    let json = getData('../config/database.json')
+    if (json.find(x => x.name === name)) return res.end('The name exists, please choose another one')
 
-        let obj = new Cube(name, imageUrl, description, difficultyLevel)
-        json.push(obj)
-        writeData(json)
-        // })
-        res.redirect('/')
-        // res.render('create', {
-        //     helpers: {
-        //         log: function () { return "BAR" }
-        //     },
-        // })
+    let obj = new Cube(name, imageUrl, description, difficultyLevel)
+    json.push(obj)
+    writeData(json)
+    // })
+    res.redirect('/')
+    // res.render('create', {
+    //     helpers: {
+    //         log: function () { return "BAR" }
+    //     },
+    // })
 
-    });
+});
 
-    app.get('/details/:id', function (req, res, next) {
-        let links = getData('../config/database.json')
-        let id = req.params.id
-        let record = links.find(x => x.id === id)
-        res.render('details.hbs', record)
-    });
+router.get('/details/:id', function (req, res, next) {
+    let links = getData('../config/database.json')
+    let id = req.params.id
+    let record = links.find(x => x.id === id)
+    res.render('details.hbs', record)
+});
 
-    app.all('*', (req, res) => {
-        res.render('404.hbs')
-    })
+router.all('*', (req, res) => {
+    res.render('404.hbs')
+})
 
-};
+// };
 
-// module.exports = router
+module.exports = router
