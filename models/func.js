@@ -2,9 +2,9 @@ const express = require('express');
 const fs = require('fs')
 const path = require('path')
 
-function getData(filename) {
+function getData() {
     let filePath = path.normalize(
-        path.join(__dirname, filename)
+        path.join(__dirname, '../config/database.json')
     );
     let data = fs.readFileSync(filePath)
     return JSON.parse(data)
@@ -17,7 +17,13 @@ function writeData(data) {
     });
 }
 
+function getCube(id) {
+    let links = getData()
+    return links.find(x => x.id === id)
+}
+
 module.exports = {
     getData,
-    writeData
+    writeData,
+    getCube
 }
