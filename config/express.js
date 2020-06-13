@@ -18,10 +18,11 @@ module.exports = (app) => {
     }));
     app.set('view engine', '.hbs');
 
-    // app.use(express.static(path.join(__dirname, '../static'))); 
-    app.use(express.static('static'));
+    app.use(express.static(path.join(__dirname, '../static'))); 
+    // app.use(express.static('static'));
 
-    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(express.urlencoded({ extended: true }))
+    // app.use(bodyParser.urlencoded({ extended: true }));
 
 };
 
