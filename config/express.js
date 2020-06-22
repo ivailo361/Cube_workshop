@@ -1,8 +1,7 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
 const path = require('path')
-
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser'); it is integrated in express
 
 
 module.exports = (app) => {
@@ -12,7 +11,7 @@ module.exports = (app) => {
         helpers: {
             log: function () { return "LOG"}
         },
-        partialsDir: './partials',
+        partialsDir: './views/partials', /* ./'partials' */
         // defaultLayout: false,
         layoutsDir: path.join(__dirname, '../views/layouts'),
     }));
@@ -26,8 +25,5 @@ module.exports = (app) => {
 
 };
 
-// handlebars.getPartials().then(function (partials) {
-//     console.log(partials);
-//     // => { 'foo/bar': [Function],
-//     // =>    title: [Function] }
-// });
+
+

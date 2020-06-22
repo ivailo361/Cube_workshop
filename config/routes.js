@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router()
+
 const { getData, writeData, getCube, searchCube } = require('../models/func.js')
 
 // module.exports = (app) => {
@@ -28,7 +29,6 @@ router.get('/create', function (req, res, next) {
 });
 
 router.post('/create', (req, res, next) => {
-    console.log(req.body)
     writeData(req.body, () => {
         res.redirect('/')
     })

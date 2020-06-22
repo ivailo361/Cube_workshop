@@ -4,16 +4,13 @@ const config = require('./config/config')[env];
 const express = require('express');
 const app = express()
 
+
 require('./config/express')(app);
 
 const route = require('./config/routes.js')
 app.use('/', route)
 
 // require('./config/routes')(app);
-
- 
-
-
 
 
 
