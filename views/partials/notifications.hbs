@@ -1,0 +1,35 @@
+<div id="notifications">
+    {{#if success}}
+    <div style="display: none;" id="success">{{success}}</div>
+    <script>
+        let element = document.getElementById("success")
+        element.style.display = "block"
+        setTimeout(function () {
+            element.style.display = "none"
+        }, 3000)
+    </script>
+    {{/if}}
+
+    {{#if error}}
+    <div style="display: none;" id="error">{{error}}</div>
+    <script>
+        let element = document.getElementById("error")
+        element.style.display = "block"
+        setTimeout(function () {
+            element.style.display = "none"
+        }, 3000)
+    </script>
+    {{/if}}
+
+    {{#if respond}}
+    <div style="display: none;" id="successBox" class="alert alert-success" role="alert">{{respond}}</div>
+    <script>
+        document.getElementById("successBox").style.display = "block"
+        setTimeout(fade_out, 3000);
+        function fade_out() {
+            $("#successBox").fadeOut().empty();
+        }
+    </script>
+    {{/if}}
+
+</div>

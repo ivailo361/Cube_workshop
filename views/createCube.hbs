@@ -1,5 +1,6 @@
 <div class="container">
   {{> header}}
+  {{> notifications}}
   <main>
     <h1>Create</h1>
     <div class="form">
@@ -9,7 +10,7 @@
         <label for="name">Description</label>
         <textarea id="name" name="description"></textarea>
         <label for="image">ImageUrl</label>
-        <input type="text" id="image" name="imageUrl">
+        <input type="text" id="image" name="url">
         <label for="difficulty">Difficulty</label>
         <select id="difficulty" name="difficultyLevel">
           <option value="1">1 - Very Easy</option>
@@ -22,6 +23,9 @@
         <p>{{log}}</p>
         <input type="submit" value="Create">
       </form>
+  
+
+
     </div>
   </main>
 </div>
