@@ -75,7 +75,11 @@ class MongoDB {
         const results = await cursor.toArray();
         if (results.length > 0) {
             return results;
-        } else {
+        } 
+        // else if (results.length === 1){
+        //     return results
+        // } 
+        else {
             console.log(`No listings found `);
         }
     }
@@ -148,8 +152,7 @@ class MongoDB {
         const db = await this.main();
         try {
             const result = await db.collection(collectionName).insertOne(record);
-
-            console.log(`New listing created with the following id: ${result.insertedId}`);
+            // console.log(`New listing created with the following id: ${result.insertedId}`);
             return result.insertedId;
         } catch (e) {
             console.error(e);
