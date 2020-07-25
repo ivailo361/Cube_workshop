@@ -1,8 +1,9 @@
 <div id="notifications">
     {{#if success}}
-    <div style="display: none;" id="success">{{success}}</div>
+    <div style="display: none;" id="infobox" class="success">{{success}}</div>
+
     <script>
-        let element = document.getElementById("success")
+        let element = document.getElementById("infobox")
         element.style.display = "block"
         setTimeout(function () {
             element.style.display = "none"
@@ -11,13 +12,20 @@
     {{/if}}
 
     {{#if error}}
-    <div style="display: none;" id="error">{{error}}</div>
+    <div style="display: none;" id="error">
+        <div class="errorMessage">{{error}}</div>
+        <button type="button" class="errorMessage" onclick="window.closse()">X</button>
+        {{!-- <div><a href="/">x</a></div> --}}
+    </div>
     <script>
         let element = document.getElementById("error")
-        element.style.display = "block"
-        setTimeout(function () {
+        element.style.display = "flex"
+      
+
+        function closse() {
+            let element = document.getElementById("error")
             element.style.display = "none"
-        }, 3000)
+        }
     </script>
     {{/if}}
 

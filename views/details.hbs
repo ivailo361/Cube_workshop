@@ -1,21 +1,22 @@
 <div class="container">
   {{> header}}
+  {{> notifications}}
   <main>
-    <h1>{{cube.name}}</h1>
-    <img class="cube" src={{cube.url}}>
+    <h1>{{name}}</h1>
+    <img class="cube" src={{url}}>
     <div class="details">
-      <p><span>Description:</span>{{cube.description}}</p>
-      <p><span>Difficulty level:</span>{{cube.level}}</p>
+      <p><span>Description:</span>{{description}}</p>
+      <p><span>Difficulty level:</span>{{level}}</p>
       <a class="btn" href="/">Back</a>
-      <a class="btn" href="/delete/{{cube._id}}">Delete</a>
-      <a class="btn2" href="/attach/accessory/{{cube._id}}">attachAccessory</a>
+      <a class="btn" href="/delete/{{_id}}">Delete</a>
+      <a class="btn2" href="/attach/accessory/{{_id}}">attachAccessory</a>
     </div>
   </main>
   <h2>Accessories</h2>
   {{#if accessory}}
   <div class="accessories">
 
-      {{addCubeId accessory cube._id}}
+      {{addCubeId accessory _id}}
 
       {{#each accessory}}
          {{> accessInDetails}}

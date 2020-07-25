@@ -1,70 +1,74 @@
-const { Cube, Accessory } = require("./cube")
-const MongoDB = require("./mongo");
+// const { Cube, Accessory } = require("./cube")
+// const MongoDB = require("./mongo");
 
-const db = new MongoDB();
+// const db = new MongoDB();
 
-// function errorHandle(error) {
-//     console.log(error)
-// }
+
 // async function getData(collectionName) {
-//     let data = await db.getAllData(collectionName)
+//     let data = await db.getData(collectionName)
 //     return data
 // }
 
-async function findMissingAccessories(collection, cubeId, missing) {
-
-    let items = await db.extractCubesFromAccessories(collection, cubeId, missing)
-    return items.length === 0 ? false : items
-}
-
-async function addAccessoriesInCube(cubesDb, accessDb, cubeId, accessoryId)  {
-    let result = await db.addAccessories(cubesDb, accessDb, cubeId, accessoryId)
-    return result
-}
-
-async function writeData(collectionName, inputData) {
-    // console.log(...Object.values(inputData))
-
-    let { name, description, url, difficultyLevel } = inputData
-    let obj = {}
-    if (collectionName === 'cubesList') {
-        obj = new Cube(name, description, url, difficultyLevel)
+let validation = {
+    name: (ime) => {
+        if (ime.length === 0) {
+            throw new Error("The name should not be empty")
+        } else {
+            return ime
+        }
+    },
+    description: (des) => {
+        if (des.length <= 5) {
+            throw new Error("The description should be more than 5 symbols")
+        } else {
+            return des
+        }
+    },
+    url: (link) => {
+        if (link === "") {
+            return "https://secure.img1-fg.wfcdn.com/im/79891591/compr-r85/1902/1902870/stainless-steel-cube-end-table.jpg"
+        }
+        else if (!link.match(/^https?:\/\//)) {
+            throw new Error("The URL should starts with http or https")
+        }
+        else {
+            return link
+        }
     }
-    else if (collectionName === 'accessories') {
-        obj = new Accessory(name, url, description)
+
+}
+
+function messages(keyWord, param) {
+    let obj = {
+        success: `You successfully added accessory to cube name ${param}`,
+        deletedAccessories: `Accessory was successfully deleted form cube ${param}`
     }
-    else {
-        throw new Error('wrong db name')
-    }
 
-    let result = await db.insertData(collectionName, obj)
-    console.log('The document has been saved!')
-    return result
+    return obj[keyWord]
 }
 
-async function getCube(collectionName, cubeId) {
-    // let links = await getData(collectionName)
-    // return links.find(x => x._id.toString() === id)
-    let links = await db.getAllData(collectionName, cubeId)
-    return links[0]
+function validateInput(inputData) {
+    let obj = Object.keys(inputData)
+        .reduce((acc, b) => {
+            if (acc[b]) {
+                throw new Error("There are duplicated bs")
+            }
+            if (typeof (validation[b]) === "function") {
+                let valid = validation[b](inputData[b])
+                acc[b] = valid
+            } else {
+                acc[b] = inputData[b]
+            }
+            return acc
+        }, {})
+    return obj
 }
 
-async function deleteCube(collectionName, id) {
-    let result = await db.deleteOneCube(collectionName, id)
-    console.log(`${result.deletedCount} document was deleted.`);
-    return result.deletedCount
-}
 
-async function deleteArrayRecords(collectionName, cubeId, accessId) {
-    let result = await db.removeIdFromArray(collectionName, cubeId, accessId)
-    console.log(result.modifiedCount)
-    return result.modifiedCount
-}
-
-async function searchCube(collectionName, inputData) {
+function searchCube(database, inputData) {
     let search = new RegExp(inputData.search, 'i')
-    let data = await getData(collectionName)
-    let selected = data
+    console.log(inputData)
+    let selected = database
         .filter(x => {
             let isNameExist = x.name.match(search);
             let isLevelHigherFrom = Number(x.level) >= Number(inputData.from);
@@ -80,12 +84,7 @@ async function searchCube(collectionName, inputData) {
 }
 
 module.exports = {
-
-    writeData,
-    getCube,
+    validateInput,
     searchCube,
-    deleteCube,
-    addAccessoriesInCube,
-    findMissingAccessories,
-    deleteArrayRecords
+    messages
 }
