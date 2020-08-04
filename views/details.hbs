@@ -8,7 +8,10 @@
       <p><span>Description:</span>{{description}}</p>
       <p><span>Difficulty level:</span>{{level}}</p>
       <a class="btn" href="/">Back</a>
+      {{#if isCreator}}
       <a class="btn" href="/delete/{{_id}}">Delete</a>
+      <a class="btn" href="/edit/{{_id}}">Edit</a>
+      {{/if}}
       <a class="btn2" href="/attach/accessory/{{_id}}">attachAccessory</a>
     </div>
   </main>

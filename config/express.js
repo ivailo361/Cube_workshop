@@ -1,6 +1,7 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
 const path = require('path')
+const cookieParser = require("cookie-parser")
 // const bodyParser = require('body-parser'); it is integrated in express
 
 
@@ -11,6 +12,9 @@ module.exports = (app) => {
         helpers: {
             log: function () { return "LOG" },
             addCubeId: function (accessory, cubeId) { accessory.forEach(x => x.cubeId = cubeId) },
+            selectDifficultLevel: function(value) {
+                document.getElementById('difficulty').setAttribute('value', value)
+            }
          },
         partialsDir: './views/partials', /* ./'partials' */
         // defaultLayout: false,
@@ -18,11 +22,15 @@ module.exports = (app) => {
     }));
     app.set('view engine', '.hbs');
 
+    // app.set('env', 'production')
+
     app.use(express.static(path.join(__dirname, '../static')));
     // app.use(express.static('static'));
 
     app.use(express.urlencoded({ extended: true }))
     // app.use(bodyParser.urlencoded({ extended: true }));
+
+    app.use(cookieParser())
 
 };
 
