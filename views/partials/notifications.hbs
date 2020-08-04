@@ -30,13 +30,14 @@
     {{/if}}
 
     {{#if respond}}
-    <div style="display: none;" id="successBox" class="alert alert-success" role="alert">{{respond}}</div>
+    <div style="display: none;" id="infobox" class="success">{{respond}}</div>
+
     <script>
-        document.getElementById("successBox").style.display = "block"
-        setTimeout(fade_out, 3000);
-        function fade_out() {
-            $("#successBox").fadeOut().empty();
-        }
+        let element = document.getElementById("infobox")
+        element.style.display = "block"
+        setTimeout(function () {
+            element.style.display = "none"
+        }, 3000)
     </script>
     {{/if}}
 

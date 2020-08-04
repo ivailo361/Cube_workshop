@@ -68,6 +68,12 @@ class MongoDB {
         console.log(result.writeConcerns)
     };
 
+    async getUser(collectionName, name) {
+        const db = await this.main();
+        let param = { username: name }
+        return await db.collection(collectionName).findOne(param);
+    }
+
     async getData(collectionName, cubeId) {
         const db = await this.main();
         let param = cubeId ? { _id: new ObjectId(cubeId) } : ""
@@ -75,7 +81,7 @@ class MongoDB {
         const results = await cursor.toArray();
         if (results.length > 0) {
             return results;
-        } 
+        }
         // else if (results.length === 1){
         //     return results
         // } 
@@ -160,6 +166,21 @@ class MongoDB {
         finally {
             await this.client.close();
         }
+    }
+
+    async updateData(collectionName, query, record) {
+        const db = await this.main();
+
+        const o_cubeId = new ObjectId(query);
+        const queryParam = { "_id": o_cubeId };
+
+        const { name, description, url, difficultyLevel } = record
+        const updatedData = { $set: { name, description, url, level: difficultyLevel } }
+
+        const result = await db.collection(collectionName)
+            .updateOne(queryParam, updatedData);
+
+        return result
     }
 }
 
